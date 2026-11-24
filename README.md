@@ -106,8 +106,9 @@ Análise de Pareto (`80/20`) das causas de acidentes com curva de percentual acu
 ## 📁 Estrutura do Repositório
 
 ```text
+├── assets/                                     # Capturas de tela das 11 páginas do dashboard (.jpg)
 ├── data/
-│   └── dicionario_dados.md    # Documentação das colunas e medidas DAX do modelo
-├── assets/                    # Capturas de tela das 11 páginas do dashboard (.jpg)
-├── pbix/                      # Arquivo fonte do projeto (.pbix)
-└── README.md                  # Documentação principal do projeto
+│   └── dicionario_base_analitica_prf_2025.md   # Documentação das colunas e medidas DAX do modelo
+├── pbix/
+│   └── dashboard-acidentes-prf-2025.pbix       # Arquivo fonte do projeto no Power BI
+└── README.md                                   # Documentação principal do projeto
