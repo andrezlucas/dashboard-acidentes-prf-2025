@@ -1,1 +1,64 @@
+# 📖 Dicionário de Dados: `base_analitica_prf_2025`
 
+Documentação das colunas originais, colunas calculadas e medidas DAX utilizadas no modelo analítico do Power BI.
+
+## 1. Dimensões Temporais e Geográficas
+
+| Campo | Tipo | Descrição |
+| :--- | :--- | :--- |
+| `id` | Numérico | Identificador único do registro do acidente. |
+| `data_inversa` | Data | Data completa da ocorrência no formato `DD/MM/AAAA`. |
+| `ano` | Numérico | Ano de registro do sinistro (`2025`). |
+| `dia_semana` | Texto | Dia da semana por extenso (Domingo a Sábado). |
+| `dia_semana_num` | Numérico | Índice numérico do dia da semana para ordenação cronológica. |
+| `horario` | Hora | Horário exato do registro da ocorrência. |
+| `hora` | Numérico | Hora cheia extraída do horário do acidente (`0` a `23`). |
+| `faixa_horaria` | Texto | Agrupamento do horário em intervalos de 3 horas (ex: `00H-02H`, `18H-20H`). |
+| `fase_dia` | Texto | Período do dia no momento do acidente (`Pleno Dia`, `Plena Noite`, `Anoitecer`, `Amanhecer`). |
+| `FimDeSemana` | Texto | Coluna calculada classificando a ocorrência entre `Dia útil` e `Fim de semana`. |
+| `fim_de_semana` | Numérico | Indicador binário de final de semana (`1` ou `0`). |
+| `uf` | Texto | Sigla da Unidade Federativa onde ocorreu o sinistro. |
+| `municipio` | Texto | Nome do município da ocorrência (utilizado no mapa coroplético de PE). |
+| `delegacia` | Texto | Código da delegacia da PRF responsável pelo atendimento. |
+| `br` | Numérico | Número da rodovia federal. |
+| `br_formatada` | Texto | Identificação padronizada da rodovia (ex: `BR-101`, `BR-232`). |
+| `km` | Numérico | Quilômetro exato da rodovia onde ocorreu o acidente. |
+| `chave_localidade` | Texto | Chave composta de identificação geográfica da localidade. |
+| `latitude` | Decimal | Coordenada geográfica de latitude do sinistro. |
+| `longitude` | Decimal | Coordenada geográfica de longitude do sinistro. |
+
+## 2. Características e Fatores do Sinistro
+
+| Campo | Tipo | Descrição |
+| :--- | :--- | :--- |
+| `causa_acidente` | Texto | Causa principal identificada pela PRF (ex: *Ausência de reação do condutor*, *Velocidade incompatível*). |
+| `tipo_acidente` | Texto | Natureza da ocorrência (ex: *Colisão traseira*, *Saída de leito carroçável*, *Atropelamento*). |
+| `classificacao_acidente` | Texto | Gravidade geral do acidente (`Com Vítimas Fatais`, `Com Vítimas Feridas`, `Sem Vítimas`). |
+| `condicao_meteorologica` | Texto | Condição climática no momento do sinistro (`Céu Claro`, `Nublado`, `Chuva`, `Sol`, etc.). |
+| `tipo_pista` | Texto | Configuração estrutural da rodovia (`Simples`, `Dupla`, `Múltipla`). |
+
+## 3. Métricas de Vítimas e Severidade
+
+| Campo | Tipo | Descrição |
+| :--- | :--- | :--- |
+| `feridos_leves` | Numérico | Quantidade de vítimas com ferimentos leves. |
+| `feridos_graves` | Numérico | Quantidade de vítimas com ferimentos graves. |
+| `feridos` | Numérico | Total de pessoas feridas no acidente (`feridos_leves + feridos_graves`). |
+| `mortos` | Numérico | Total de óbitos registrados no local. |
+| `ilesos` | Numérico | Quantidade de envolvidos sem ferimentos. |
+| `ignorados` | Numérico | Envolvidos cujo estado físico não foi identificado. |
+| `acidente_fatal` | Numérico | Indicador binário (`1` se houve pelo menos um morto, `0` caso contrário). |
+| `acidente_grave` | Numérico | Indicador binário para ocorrências com vítimas graves ou fatais. |
+| `indice_gravidade` | Decimal | Índice ponderado de severidade da ocorrência. |
+
+## 4. Medidas DAX Principais
+
+| Medida | Descrição do Cálculo |
+| :--- | :--- |
+| `Total Acidentes` | Contagem distinta de ocorrências registradas (`DISTINCTCOUNT(id)`). |
+| `Acidentes Fatais` | Total de ocorrências que resultaram em pelo menos uma morte. |
+| `Total Mortos` | Soma absoluta de óbitos (`SUM(mortos)`). |
+| `Total Feridos` | Soma absoluta de vítimas feridas (`SUM(feridos)`). |
+| `Taxa de Fatalidade` | Razão percentual entre `Acidentes Fatais` e `Total Acidentes`. |
+| `Taxa Letalidade` | Razão percentual entre `Total Mortos` e o total de vítimas/envolvidos. |
+| `% Acumulado` | Percentual acumulado dinâmico das causas de acidente para construção da curva de Pareto. |
